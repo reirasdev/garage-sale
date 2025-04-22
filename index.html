@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itens à Venda</title>
-    <!-- Added Font Awesome for the WhatsApp icon -->
+    <!-- Font Awesome for WhatsApp icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- basicLightbox CSS for image overlay -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
     <style>
         body {
             font-family: sans-serif;
@@ -15,31 +17,38 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 15px; /* Adjusted margin */
+            margin-bottom: 15px;
         }
-        /* Styling for the new briefing and contact info */
         .briefing {
             text-align: center;
             color: #555;
             font-size: 1.1em;
-            max-width: 800px; /* Limit width */
-            margin: 0 auto 10px auto; /* Center block and add bottom margin */
+            max-width: 800px;
+            margin: 0 auto 10px auto;
             line-height: 1.5;
         }
         .contact-info {
             text-align: center;
-            color: #333;
+            margin: 0 auto 30px auto;
+        }
+        /* Styling for the contact link */
+        .contact-info a {
+            color: #333; /* Match surrounding text color */
             font-size: 1.2em;
             font-weight: bold;
-            margin: 0 auto 30px auto; /* Center block and add more bottom margin */
+            text-decoration: none; /* Remove underline */
+            transition: color 0.2s ease; /* Add hover effect */
+        }
+        .contact-info a:hover {
+            color: #0056b3; /* Change color on hover */
         }
         .contact-info i.fa-whatsapp {
-            color: #25D366; /* WhatsApp green */
-            margin-left: 8px; /* Space between number and icon */
-            font-size: 1.2em; /* Slightly larger icon */
-            vertical-align: middle; /* Align icon nicely with text */
+            color: #25D366;
+            margin-left: 8px;
+            font-size: 1.2em;
+            vertical-align: middle;
         }
-        /* End new styles */
+        /* End contact link styles */
 
         .item-list {
             margin-top: 30px;
@@ -65,6 +74,11 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
+            cursor: pointer; /* Indicate main image is clickable */
+            transition: opacity 0.2s ease; /* Add transition for visual feedback */
+        }
+        .item .main-image:hover {
+            opacity: 0.9;
         }
          .thumbnails {
             display: flex;
@@ -78,13 +92,17 @@
             width: 80px;
             height: 60px;
             object-fit: cover;
-            border: 1px solid #ccc;
+            border: 2px solid transparent; /* Add border for active state */
             border-radius: 4px;
             cursor: pointer;
             background-color: #eee;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
         .thumbnail:hover {
+             transform: scale(1.05);
+        }
+        .thumbnail.active { /* Style for the active thumbnail */
+             border-color: #007bff; /* Example active color */
              transform: scale(1.05);
         }
         .item h2 {
@@ -110,19 +128,22 @@
             line-height: 1.5;
             text-align: center;
         }
+        /* BasicLightbox styles override if needed */
+        .basicLightbox__placeholder img {
+            max-width: 90vw;
+            max-height: 90vh;
+        }
     </style>
 </head>
 <body>
 
-    <h1>à Venda</h1>
+    <h1>Itens à Venda</h1>
 
-    <!-- Added Briefing Section -->
     <p class="briefing">
         Todos os itens são negociáveis, estão funcionando e em bom estado. <br>
         Retirada por conta do comprador. Cabo Frio / RJ<br>
         Venda por motivo de mudança.
     </p>
-    <!-- Added Contact Info Section -->
     <p class="contact-info">
         <a href="http://wa.me/5522998528877" target="_blank" rel="noopener noreferrer">
             (22) 99852-8877 <i class="fab fa-whatsapp"></i>
@@ -135,16 +156,18 @@
         <div class="item">
             <img src="pics/cozinha/cozinha01.jpeg" alt="Armário de Cozinha Compacta Nesher Prática Smart Jr - Imagem Principal" class="main-image">
             <div class="thumbnails">
-                <img src="pics/cozinha/cozinha02.jpeg" alt="Armário Cozinha Thumbnail 1" class="thumbnail">
-                <img src="pics/cozinha/cozinha03.jpeg" alt="Armário Cozinha Thumbnail 2" class="thumbnail">
-                <img src="pics/cozinha/cozinha04.jpeg" alt="Armário Cozinha Thumbnail 3" class="thumbnail">
-                <img src="pics/cozinha/cozinha05.jpeg" alt="Armário Cozinha Thumbnail 3" class="thumbnail">
-                <img src="pics/cozinha/cozinha06.jpeg" alt="Armário Cozinha Thumbnail 3" class="thumbnail">
-                <img src="pics/cozinha/cozinha07.jpeg" alt="Armário Cozinha Thumbnail 3" class="thumbnail">
-                <img src="pics/cozinha/cozinha08.jpeg" alt="Armário Cozinha Thumbnail 3" class="thumbnail">
-                <img src="pics/cozinha/cozinha09.jpeg" alt="Armário Cozinha Thumbnail 3" class="thumbnail">
-                <img src="pics/cozinha/cozinha10.jpeg" alt="Armário Cozinha Thumbnail 3" class="thumbnail">
-                <!-- Add more <img class="thumbnail"> tags here as needed -->
+                <!-- IMPORTANT: Update data-large-src with your actual large image filenames -->
+                <img src="pics/cozinha/cozinha01.jpeg" data-large-src="pics/cozinha/cozinha01.jpeg" alt="Armário de Cozinha" class="thumbnail">
+                <img src="pics/cozinha/cozinha02.jpeg" data-large-src="pics/cozinha/cozinha02.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha03.jpeg" data-large-src="pics/cozinha/cozinha03.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha04.jpeg" data-large-src="pics/cozinha/cozinha04.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha05.jpeg" data-large-src="pics/cozinha/cozinha05.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha06.jpeg" data-large-src="pics/cozinha/cozinha06.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha07.jpeg" data-large-src="pics/cozinha/cozinha07.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha08.jpeg" data-large-src="pics/cozinha/cozinha08.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha09.jpeg" data-large-src="pics/cozinha/cozinha09.jpeg" alt="Armário de Cozinha" class="thumbnail">
+				<img src="pics/cozinha/cozinha10.jpeg" data-large-src="pics/cozinha/cozinha10.jpeg" alt="Armário de Cozinha" class="thumbnail">
+                <!-- Add more <img class="thumbnail"> tags here as needed, ensure data-large-src is correct -->
             </div>
             <h2>Armário de Cozinha Compacta Nesher Prática Smart Jr com 4 Portas, 2 Gavetas, 6 Prateleiras</h2>
             <div class="price">R$500,00</div>
@@ -156,9 +179,9 @@
         <div class="item">
             <img src="geladeira01.jpg" alt="Geladeira Consul Duplex - Frost Free - Imagem Principal" class="main-image">
              <div class="thumbnails">
-                <img src="geladeira01_thumb1.jpg" alt="Geladeira Thumbnail 1" class="thumbnail">
-                <img src="geladeira01_thumb2.jpg" alt="Geladeira Thumbnail 2" class="thumbnail">
-                <!-- Add more <img class="thumbnail"> tags here as needed -->
+                <img src="geladeira01_thumb1.jpg" data-large-src="geladeira01.jpg" alt="Geladeira Thumbnail 1" class="thumbnail">
+                <img src="geladeira01_thumb2.jpg" data-large-src="geladeira01_pic2.jpg" alt="Geladeira Thumbnail 2" class="thumbnail">
+                <!-- Add more thumbnails -->
             </div>
             <h2>Geladeira Consul Duplex - Frost Free</h2>
             <div class="price">R$ 900,00</div>
@@ -170,10 +193,10 @@
         <div class="item">
             <img src="rack01.jpg" alt="Rack Bancada DJ Móveis Peres - Imagem Principal" class="main-image">
              <div class="thumbnails">
-                <img src="rack01_thumb1.jpg" alt="Rack Thumbnail 1" class="thumbnail">
-                <img src="rack01_thumb2.jpg" alt="Rack Thumbnail 2" class="thumbnail">
-                <img src="rack01_thumb3.jpg" alt="Rack Thumbnail 3" class="thumbnail">
-                <!-- Add more <img class="thumbnail"> tags here as needed -->
+                <img src="rack01_thumb1.jpg" data-large-src="rack01.jpg" alt="Rack Thumbnail 1" class="thumbnail">
+                <img src="rack01_thumb2.jpg" data-large-src="rack01_pic2.jpg" alt="Rack Thumbnail 2" class="thumbnail">
+                <img src="rack01_thumb3.jpg" data-large-src="rack01_pic3.jpg" alt="Rack Thumbnail 3" class="thumbnail">
+                 <!-- Add more thumbnails -->
             </div>
             <h2>Rack Bancada DJ Móveis Peres para TV’s de até 70" - Ginger</h2>
             <div class="price">R$ 350,00</div>
@@ -185,10 +208,10 @@
         <div class="item">
             <img src="roupa4pts01.jpg" alt="Guarda Roupas 4 Portas Madeira Maciça - Imagem Principal" class="main-image">
              <div class="thumbnails">
-                <img src="roupa4pts01_thumb1.jpg" alt="Guarda Roupa 4p Thumbnail 1" class="thumbnail">
-                <img src="roupa4pts01_thumb2.jpg" alt="Guarda Roupa 4p Thumbnail 2" class="thumbnail">
-                <img src="roupa4pts01_thumb3.jpg" alt="Guarda Roupa 4p Thumbnail 3" class="thumbnail">
-                 <!-- Add more <img class="thumbnail"> tags here as needed -->
+                <img src="roupa4pts01_thumb1.jpg" data-large-src="roupa4pts01.jpg" alt="Guarda Roupa 4p Thumbnail 1" class="thumbnail">
+                <img src="roupa4pts01_thumb2.jpg" data-large-src="roupa4pts01_pic2.jpg" alt="Guarda Roupa 4p Thumbnail 2" class="thumbnail">
+                <img src="roupa4pts01_thumb3.jpg" data-large-src="roupa4pts01_pic3.jpg" alt="Guarda Roupa 4p Thumbnail 3" class="thumbnail">
+                 <!-- Add more thumbnails -->
             </div>
             <h2>Guarda Roupas 4 Portas em Madeira Maciça - Estilo Colonial</h2>
             <div class="price">R$ 1.300,00</div>
@@ -200,9 +223,9 @@
         <div class="item">
             <img src="roupa3pts01.jpg" alt="Guarda Roupas 3 Portas Madeira Maciça - Imagem Principal" class="main-image">
              <div class="thumbnails">
-                <img src="roupa3pts01_thumb1.jpg" alt="Guarda Roupa 3p Thumbnail 1" class="thumbnail">
-                <img src="roupa3pts01_thumb2.jpg" alt="Guarda Roupa 3p Thumbnail 2" class="thumbnail">
-                 <!-- Add more <img class="thumbnail"> tags here as needed -->
+                <img src="roupa3pts01_thumb1.jpg" data-large-src="roupa3pts01.jpg" alt="Guarda Roupa 3p Thumbnail 1" class="thumbnail">
+                <img src="roupa3pts01_thumb2.jpg" data-large-src="roupa3pts01_pic2.jpg" alt="Guarda Roupa 3p Thumbnail 2" class="thumbnail">
+                 <!-- Add more thumbnails -->
             </div>
             <h2>Guarda Roupas 3 Portas em Madeira Maciça - Estilo Colonial</h2>
             <div class="price">R$ 1.100,00</div>
@@ -214,10 +237,10 @@
         <div class="item">
             <img src="sofa01.jpg" alt="Sofá retrátil e reclinável - Imagem Principal" class="main-image">
              <div class="thumbnails">
-                <img src="sofa01_thumb1.jpg" alt="Sofa Thumbnail 1" class="thumbnail">
-                <img src="sofa01_thumb2.jpg" alt="Sofa Thumbnail 2" class="thumbnail">
-                <img src="sofa01_thumb3.jpg" alt="Sofa Thumbnail 3" class="thumbnail">
-                 <!-- Add more <img class="thumbnail"> tags here as needed -->
+                <img src="sofa01_thumb1.jpg" data-large-src="sofa01.jpg" alt="Sofa Thumbnail 1" class="thumbnail">
+                <img src="sofa01_thumb2.jpg" data-large-src="sofa01_pic2.jpg" alt="Sofa Thumbnail 2" class="thumbnail">
+                <img src="sofa01_thumb3.jpg" data-large-src="sofa01_pic3.jpg" alt="Sofa Thumbnail 3" class="thumbnail">
+                 <!-- Add more thumbnails -->
             </div>
             <h2>Sofá retrátil e reclinável</h2>
             <div class="price">R$600,00</div>
@@ -229,9 +252,9 @@
         <div class="item">
             <img src="lona01.jpg" alt="Lona Azul / Capa Piscina - Imagem Principal" class="main-image">
              <div class="thumbnails">
-                <img src="lona01_thumb1.jpg" alt="Lona Thumbnail 1" class="thumbnail">
-                <img src="lona01_thumb2.jpg" alt="Lona Thumbnail 2" class="thumbnail">
-                 <!-- Add more <img class="thumbnail"> tags here as needed -->
+                <img src="lona01_thumb1.jpg" data-large-src="lona01.jpg" alt="Lona Thumbnail 1" class="thumbnail">
+                <img src="lona01_thumb2.jpg" data-large-src="lona01_pic2.jpg" alt="Lona Thumbnail 2" class="thumbnail">
+                 <!-- Add more thumbnails -->
             </div>
             <h2>Lona Azul / Capa Piscina 300 Micras com Kit Instalação 7,5m x5,5m</h2>
             <div class="price">R$350,00</div>
@@ -240,6 +263,60 @@
         <!-- End Item 7 -->
 
     </div>
+
+    <!-- basicLightbox JS -->
+    <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+
+    <!-- Custom JavaScript for Gallery -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Thumbnail Click Handler ---
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    const largeSrc = this.getAttribute('data-large-src');
+                    if (!largeSrc) return; // Do nothing if no large source defined
+
+                    const itemDiv = this.closest('.item'); // Find the parent item container
+                    if (!itemDiv) return;
+
+                    const mainImage = itemDiv.querySelector('.main-image');
+                    if (!mainImage) return;
+
+                    mainImage.src = largeSrc; // Update main image source
+
+                    // Update active state for thumbnails within the same item
+                    const itemThumbnails = itemDiv.querySelectorAll('.thumbnail');
+                    itemThumbnails.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // --- Main Image Click Handler (Lightbox) ---
+            const mainImages = document.querySelectorAll('.main-image');
+            mainImages.forEach(img => {
+                img.addEventListener('click', function() {
+                    const imageSrc = this.src;
+                    if (!imageSrc) return;
+
+                    // Use basicLightbox to show the image
+                    const instance = basicLightbox.create(`
+                        <img src="${imageSrc}" alt="Imagem Ampliada">
+                    `);
+                    instance.show();
+                });
+            });
+
+            // Set initial active state for first thumbnail in each item
+             const items = document.querySelectorAll('.item');
+             items.forEach(item => {
+                 const firstThumbnail = item.querySelector('.thumbnail');
+                 if (firstThumbnail) {
+                     firstThumbnail.classList.add('active');
+                 }
+             });
+        });
+    </script>
 
 </body>
 </html>
