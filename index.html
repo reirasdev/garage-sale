@@ -330,17 +330,23 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const items = document.querySelectorAll('.item');
+            let lightGalleryInstances = {}; // Store instances to potentially manage them later if needed
 
-            items.forEach((item, itemIndex) => {
+            items.forEach((item) => {
                 const imageGallery = item.querySelector('.image-gallery');
                 const mainImage = item.querySelector('.main-image');
                 const thumbnails = item.querySelectorAll('.thumbnail');
-                let lightGalleryInstance = null; // To store the gallery instance
+                const galleryId = imageGallery ? imageGallery.id : null; // Get the gallery ID
+
+                if (!imageGallery || !mainImage || !thumbnails.length || !galleryId) {
+                    console.warn('Skipping gallery setup for an item due to missing elements:', item);
+                    return; // Skip if essential elements are missing
+                }
 
                 // --- Thumbnail Click Handler ---
-                thumbnails.forEach((thumb, thumbIndex) => {
+                thumbnails.forEach((thumb) => {
                     thumb.addEventListener('click', function(e) {
-                        e.stopPropagation(); // Prevent triggering main image click
+                        e.stopPropagation(); // Prevent triggering main image click if propagation isn't stopped elsewhere
                         const largeSrc = this.getAttribute('data-large-src');
                         if (!largeSrc || !mainImage) return;
 
@@ -350,53 +356,80 @@
                         thumbnails.forEach(t => t.classList.remove('active'));
                         this.classList.add('active');
                     });
-
-                    // Set initial active state for the first thumbnail
-                    if (thumbIndex === 0) {
-                        thumb.classList.add('active');
-                    }
                 });
 
-                // --- Initialize lightGallery on Main Image Click ---
-                if (mainImage && imageGallery) {
-                    mainImage.addEventListener('click', function() {
-                        // Dynamically create gallery items from thumbnails
-                        const dynamicEl = [];
-                        let currentImageIndex = 0;
-                        thumbnails.forEach((thumb, index) => {
-                            const largeSrc = thumb.getAttribute('data-large-src');
-                            if (largeSrc) {
-                                dynamicEl.push({
-                                    src: largeSrc,
-                                    thumb: thumb.src, // Use thumbnail src for gallery thumbs
-                                    subHtml: thumb.alt // Optional: use alt text as caption
-                                });
-                                // Check if this thumbnail corresponds to the currently displayed main image
-                                if (mainImage.src.endsWith(largeSrc)) {
-                                     currentImageIndex = index;
-                                }
-                            }
-                        });
+                 // Set initial active state for the first thumbnail
+                 if (thumbnails.length > 0) {
+                     thumbnails[0].classList.add('active');
+                 }
 
-                        // Destroy previous instance if exists
-                        if (lightGalleryInstance) {
-                           // It's often better to create a new instance each time
-                           // lightGalleryInstance.destroy();
+
+                // --- Initialize lightGallery Trigger on Main Image Click ---
+                mainImage.addEventListener('click', function() {
+                    // Find the index of the currently active thumbnail
+                    let currentImageIndex = 0;
+                    thumbnails.forEach((thumb, index) => {
+                        if (thumb.classList.contains('active')) {
+                            currentImageIndex = index;
                         }
-
-                        // Create and open lightGallery
-                        lightGalleryInstance = lightGallery(imageGallery, {
-                            dynamic: true,
-                            dynamicEl: dynamicEl,
-                            index: currentImageIndex, // Start at the clicked image
-                            thumbnail: true, // Show thumbnails in the gallery
-                            download: false // Optional: disable download button
-                        });
-                         // Need to manually open for dynamic galleries
-                        lightGalleryInstance.openGallery(currentImageIndex);
-
                     });
-                }
+
+                    // Dynamically create gallery items from ALL thumbnails in this item's gallery
+                    const dynamicEl = [];
+                    thumbnails.forEach((thumb) => {
+                        const largeSrc = thumb.getAttribute('data-large-src');
+                        if (largeSrc) {
+                            dynamicEl.push({
+                                src: largeSrc,
+                                thumb: thumb.src,
+                                subHtml: thumb.alt || '' // Use alt text as caption
+                            });
+                        }
+                    });
+
+                    if (dynamicEl.length === 0) {
+                        console.error("No images found for lightGallery in:", galleryId);
+                        return; // Don't open if no images
+                    }
+
+                    // Destroy previous instance for this specific gallery if it exists
+                    const existingInstance = lightGalleryInstances[galleryId];
+                    if (existingInstance) {
+                       if (typeof existingInstance.destroy === 'function') {
+                           existingInstance.destroy();
+                           // console.log("Destroyed previous instance for", galleryId); // Debug log
+                       } else {
+                           console.warn("Could not destroy previous lightGallery instance for", galleryId);
+                       }
+                       delete lightGalleryInstances[galleryId]; // Remove reference
+                    }
+
+
+                    // Create and open lightGallery using the image gallery container element
+                    const instance = lightGallery(imageGallery, {
+                        dynamic: true,
+                        dynamicEl: dynamicEl,
+                        index: currentImageIndex, // Start at the image corresponding to the active thumbnail
+                        thumbnail: true, // Show thumbnails within the lightbox
+                        download: false, // Disable download button
+                        closable: true, // Ensure it can be closed
+                        escKey: true // Allow closing with Esc key
+                    });
+
+                    // Store the new instance
+                    lightGalleryInstances[galleryId] = instance;
+
+                    // Open the gallery manually since it's dynamic
+                    // Use a small timeout to ensure the DOM is ready after potential destruction/re-creation
+                    setTimeout(() => {
+                        // Check if instance still exists (might have been destroyed quickly)
+                        if (lightGalleryInstances[galleryId] === instance) {
+                           instance.openGallery();
+                           // console.log("Opened gallery for", galleryId, "at index", currentImageIndex); // Debug log
+                        }
+                    }, 50);
+
+                });
             });
         });
     </script>
